@@ -1,4 +1,4 @@
-### Road Map
+## Road Map
 
 🟢 Function that can take in 12 unconfigured cards and exhaustively find all combinations of (4, 4, 2, 2) with the NLHE strong and weak hand requirements.
 
@@ -12,7 +12,7 @@
 
 🔴 Swap out the toy game PLO hand to PLO8 once we have a ranking mechanism for PLO8, changing relevant things that need done for that.
 
-### Taiwanese Poker Rules and Points:
+## Taiwanese Poker Rules and Points:
 Usually a 2 player game where each player is dealt 12 cards from a single 52 card deck.
 
 **Unconfigured**: The 12 cards initially dealt to the player are "unconfigured". 
@@ -28,7 +28,7 @@ For the NLHE hands, their "strength" is based on their absolute strength BEFORE 
 
 --------------------------------------------------------------------------------------------------------
 
-### Simplified Toy Game
+## Simplified Toy Game
 Because there is no PLO8 Poker Hand Evaluator for python I need to first make a solver that involves just NLHE and PLO, replacing the PLO8 with another PLO hand:
 
 1. Holdem Hand (2 cards) (Weaker) - 1 Point
@@ -40,7 +40,7 @@ The order of the PLO hands (stronger/weaker) doesn't matter when we change the P
 
 --------------------------------------------------------------------------------------------------------
 
-### Project Architecture Goals
+## Project Architecture Goals
 
 * A way to efficiently determine who wins, and by how many points.
 * A way to pass in bulk batches of P1 and P2 hand configurations and boards.
@@ -49,7 +49,7 @@ The order of the PLO hands (stronger/weaker) doesn't matter when we change the P
 
 --------------------------------------------------------------------------------------------------------
 
-### Poker Hand Evaluation Theory
+## Poker Hand Evaluation Theory
 
 Hierarchy of Strength: royal flush > straight flush > quads > full house > flush > straight > three of a kind > two pair > one pair > High Card...
 
@@ -80,7 +80,7 @@ Hierarchy of Strength: royal flush > straight flush > quads > full house > flush
 
 --------------------------------------------------------------------------------------------------------
 
-### PHE Library Used
+## PHE Library Used
 
 ```python
 # "PH Evaluator" Examples
@@ -117,23 +117,23 @@ card_to_int = {
 
 --------------------------------------------------------------------------------------------------------
 
-### Simplified Game Theory Defintions
-**Monte Carlo Simulations**: Used to efficiently explore the outcomes of actions by repeatedly running simulations based on random or targeted areas.
-**Utility**: Value attributed to a certain action during a node in a round based on a fixed perspective, where the other player's action is fixed. In zero sum games, the utility of an action from Alice will result in the opposite utility for Bob.
-**Regret**: Difference between utility of the action we chose, and the utility of the other actions at that node.
-**Nash equilibrium**: State where none of the players can increase their expected utility by changing their strategy.
-**Regret Minimization**: Seeks a Nash Equilibrium by updating strategy to minimize regret. It's a form of rudimentary reinforcement learning. We want to match regrets, meaning more promising configurations of hands should be chosen more often.
-**CFRM**: Counterfactual Regret Minimization Algorithm for finding Nash Equilibrium in two-player zero-sum games, iteratively playing the game against itself, minimizing regret for not having played alternative strategies.
-**EV**: Expected Value of an action in terms of utility in regard to achieving Nash Equilibrium.
+## Simplified Game Theory Defintions
+* **Monte Carlo Simulations**: Used to efficiently explore the outcomes of actions by repeatedly running simulations based on random or targeted areas.
+* **Utility**: Value attributed to a certain action during a node in a round based on a fixed perspective, where the other player's action is fixed. In zero sum games, the utility of an action from Alice will result in the opposite utility for * Bob.
+* **Regret**: Difference between utility of the action we chose, and the utility of the other actions at that node.
+* **Nash equilibrium**: State where none of the players can increase their expected utility by changing their strategy.
+* **Regret Minimization**: Seeks a Nash Equilibrium by updating strategy to minimize regret. It's a form of rudimentary reinforcement learning. We want to match regrets, meaning more promising configurations of hands should be chosen more often.
+* **CFRM**: Counterfactual Regret Minimization Algorithm for finding Nash Equilibrium in two-player zero-sum games, iteratively playing the game against itself, minimizing regret for not having played alternative strategies.
+* **EV**: Expected Value of an action in terms of utility in regard to achieving Nash Equilibrium.
 
 
 **Rock Paper Scissors**:
-Alice plays rock. Bob plays paper. 
-Alice's action to play rock results in utility of -1 for her for that round iteration.
-The utility of paper would have been 0, and +1 for scissors. 
-Alice regrets not playing paper, and even more so regrets not playing scissors. 
-Alice's regret with regard to paper: `u(paper, paper) - u(rock, paper) = 0 - (-1) = +1`. 
-Alice's regret with regard to scissors: `u(scissors, paper) - u(rock, paper) = +1 - (-1) = +2`
+* Alice plays rock. Bob plays paper. 
+* Alice's action to play rock results in utility of -1 for her for that round iteration.
+* The utility of paper would have been 0, and +1 for scissors. 
+* Alice regrets not playing paper, and even more so regrets not playing scissors. 
+* Alice's regret with regard to paper: `u(paper, paper) - u(rock, paper) = 0 - (-1) = +1`. 
+* Alice's regret with regard to scissors: `u(scissors, paper) - u(rock, paper) = +1 - (-1) = +2`
 
 The general idea is to calculate the regret of actions, and update the strategy based on the regret for the next iteration. If you compute the average of strategies over many iterations, you should end close to Nash equilibrium.
 
@@ -141,7 +141,7 @@ The goal of CFRM is to iteratively refine strategies to minimize regret, thereby
 
 --------------------------------------------------------------------------------------------------------
 
-### Combination Math
+## Combination Math
 
 Order does not matter when configuring an unconfigured 12 card hand into buckets of (4,4,2,2). This means any way you want to compute it, it's always the same number of combos.
 
@@ -149,11 +149,11 @@ NOTE: User will always define and input Player 1's exact 12 unconfigured cards t
 
 With infinitely fast computation we could brute force a perfect answer on how to optimize the configuration of the unconfigured 12 cards to produce the highest expected Value (EV) and thus (minimized regret) as close to Nash Equilibrium as possible. This assumes the user will input a specific hand to study:
 
-Player 1 has a specific hand they want to look at = 1
-All combinations of player 2 hands must be dealt `C(40,12)` = 5,586,853,480 (40 remaining cards after P1 is dealt)
-All combinations of boards must be dealt `C(28,5)` = 98,280. (28 remaining cards, board is 5 cards)
-All configurations of player 1 hands must be exhausted. `C(12,4) * C(8,4) * C(4,2) * C(2,2)` = 207,900
-All configurations of player 2 hands must be exhausted. `C(12,4) * C(8,4) * C(4,2) * C(2,2)` = 207,900
+* Player 1 has a specific hand they want to look at = 1
+* All combinations of player 2 hands must be dealt `C(40,12)` = 5,586,853,480 (40 remaining cards after P1 is dealt)
+* All combinations of boards must be dealt `C(28,5)` = 98,280. (28 remaining cards, board is 5 cards)
+* All configurations of player 1 hands must be exhausted. `C(12,4) * C(8,4) * C(4,2) * C(2,2)` = 207,900
+* All configurations of player 2 hands must be exhausted. `C(12,4) * C(8,4) * C(4,2) * C(2,2)` = 207,900
 
 Total combinations:
 1 * 5,586,853,480 * 98,280 * 207,900 * 207,900 = 2.37 x 10^25
@@ -165,7 +165,7 @@ This small sample assumes user inputs BOTH player 1 and player 2 exact hands. Th
 
 --------------------------------------------------------------------------------------------------------
 
-### Poker Evaluation Resources
+## Poker Evaluation Resources
 
 * PH Evaluator: https://github.com/HenryRLee/PokerHandEvaluator
 * 7,462 length hashtable for hand ranks: http://suffe.cool/poker/7462.html
@@ -176,7 +176,7 @@ This small sample assumes user inputs BOTH player 1 and player 2 exact hands. Th
 * Article on hash tables for hand rankings: https://joshgoestoflatiron.medium.com/july-17-evaluating-poker-hands-with-lookup-tables-and-perfect-hashing-c21e056da130
 
 
-### Monte Carlo Regret Minimization & Nash Equilibrium Resources
+## Monte Carlo Regret Minimization & Nash Equilibrium Resources
 
 * Good overview: http://modelai.gettysburg.edu/2013/cfr/cfr.pdf
 * Python Implementation: https://github.com/LuanAdemi/CounterfactualRegretMinimization/tree/master
