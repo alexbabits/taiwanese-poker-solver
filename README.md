@@ -1,10 +1,15 @@
 ### Road Map
 
 🟢 Function that can take in 12 unconfigured cards and exhaustively find all combinations of (4, 4, 2, 2) with the NLHE strong and weak hand requirements.
+
 🟢 Function that can take in both player's configured hands and a board, and compute the winner and exact points.
+
 🟢 Function to evaluate batches of games.
+
 🟡 Try to compute a sufficient amount of batches brute force, otherwise we will need algorithm to reduce brute force method.
+
 🔴 Implement any regret minimization algorithm that is time efficient enough to produce useful Nash equilibrium results.
+
 🔴 Swap out the toy game PLO hand to PLO8 once we have a ranking mechanism for PLO8, changing relevant things that need done for that.
 
 ### Taiwanese Poker Rules and Points:
